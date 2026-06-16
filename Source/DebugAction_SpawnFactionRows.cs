@@ -9,6 +9,7 @@ namespace DebugSpawner
     public static class DebugAction_SpawnFactionRows
     {
         private const int SpawnCount = 10;
+        private const int RowGap = 2;
 
         [DebugAction("Spawning", allowedGameStates = AllowedGameStates.PlayingOnMap, displayPriority = 500)]
         private static List<DebugActionNode> SpawnFactionRows()
@@ -27,26 +28,48 @@ namespace DebugSpawner
                     continue;
                 }
 
-                List<PawnKindDef> matchingKinds = DefDatabase<PawnKindDef>.AllDefs
+                List<PawnKindDef> allKinds = DefDatabase<PawnKindDef>.AllDefs
                     .Where(kd => kd.defaultFactionDef == faction.def)
                     .OrderBy(kd => kd.defName)
                     .ToList();
 
-                if (matchingKinds.Count == 0)
+                if (allKinds.Count == 0)
                 {
                     continue;
                 }
 
                 Faction localFac = faction;
-                List<PawnKindDef> localKinds = matchingKinds;
+                List<PawnKindDef> localAllKinds = allKinds;
+                List<PawnKindDef> localFighterKinds = allKinds.Where(kd => kd.isFighter).ToList();
 
-                list.Add(new DebugActionNode(localFac.Name + " (" + localFac.def.defName + ")", DebugActionType.ToolMap)
+                DebugActionNode factionNode = new DebugActionNode(localFac.Name + " (" + localFac.def.defName + ")", DebugActionType.Action);
+                factionNode.childGetter = () =>
                 {
-                    action = delegate
+                    List<DebugActionNode> children = new List<DebugActionNode>();
+
+                    children.Add(new DebugActionNode("All (" + localAllKinds.Count + " kinds)", DebugActionType.ToolMap)
                     {
-                        SpawnFactionGrid(localFac, localKinds, UI.MouseCell());
+                        action = delegate
+                        {
+                            SpawnFactionGrid(localFac, localAllKinds, UI.MouseCell());
+                        }
+                    });
+
+                    if (localFighterKinds.Count > 0)
+                    {
+                        children.Add(new DebugActionNode("Fighters only (" + localFighterKinds.Count + " kinds)", DebugActionType.ToolMap)
+                        {
+                            action = delegate
+                            {
+                                SpawnFactionGrid(localFac, localFighterKinds, UI.MouseCell());
+                            }
+                        });
                     }
-                });
+
+                    return children;
+                };
+
+                list.Add(factionNode);
             }
 
             if (list.Count == 0)
@@ -67,7 +90,7 @@ namespace DebugSpawner
 
                 for (int col = 0; col < SpawnCount; col++)
                 {
-                    IntVec3 cell = origin + new IntVec3(col, 0, row);
+                    IntVec3 cell = origin + new IntVec3(col, 0, row * RowGap);
 
                     if (!cell.InBounds(map))
                     {

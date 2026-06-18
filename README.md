@@ -11,6 +11,21 @@ Adds a **Spawn faction rows** submenu under the **Spawning** debug action catego
 
 Each pawn kind gets one row (10 pawns wide, 2-cell row gap). Pawns are generated with `PawnGenerator.GeneratePawn` using that faction and face South.
 
+```
+        N                 origin (mouse click)
+        ^                    v
+        |    ┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+        |    │P1│P2│P3│P4│P5│P6│P7│P8│P9│P10│  ← row 0: pawn kind A
+   W <──┼──> E    (empty row)
+        |    
+        |    ┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+        |    │P1│P2│P3│P4│P5│P6│P7│P8│P9│P10│  ← row 2: pawn kind B
+        |         (empty row)
+        S    ┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+             │P1│P2│P3│P4│P5│P6│P7│P8│P9│P10│  ← row 4: pawn kind C
+              ...all facing ↓ (South)
+```
+
 ## Build
 
 ```powershell

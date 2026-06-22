@@ -3,6 +3,7 @@ using System.Linq;
 using LudeonTK;
 using RimWorld;
 using Verse;
+using Verse.AI;
 
 namespace DebugSpawner
 {
@@ -113,6 +114,11 @@ namespace DebugSpawner
                     Pawn pawn = PawnGenerator.GeneratePawn(kind, faction, -1);
                     GenSpawn.Spawn(pawn, cell, map);
                     pawn.Rotation = Rot4.South;
+
+                    if (pawn.equipment?.Primary != null)
+                    {
+                        pawn.jobs.StartJob(JobMaker.MakeJob(JobDefOf.Wait_Combat));
+                    }
                 }
             }
         }

@@ -97,17 +97,17 @@ namespace DebugSpawner
                         continue;
                     }
 
-                    if (!cell.Standable(map))
-                    {
-                        continue;
-                    }
-
                     foreach (Thing thing in cell.GetThingList(map).ToList())
                     {
                         if (thing.def.category == ThingCategory.Plant || thing.def.category == ThingCategory.Item)
                         {
                             thing.Destroy();
                         }
+                    }
+
+                    if (!cell.Standable(map))
+                    {
+                        continue;
                     }
 
                     Pawn pawn = PawnGenerator.GeneratePawn(kind, faction, -1);

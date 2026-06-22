@@ -102,6 +102,14 @@ namespace DebugSpawner
                         continue;
                     }
 
+                    foreach (Thing thing in cell.GetThingList(map).ToList())
+                    {
+                        if (thing.def.category == ThingCategory.Plant || thing.def.category == ThingCategory.Item)
+                        {
+                            thing.Destroy();
+                        }
+                    }
+
                     Pawn pawn = PawnGenerator.GeneratePawn(kind, faction, -1);
                     GenSpawn.Spawn(pawn, cell, map);
                     pawn.Rotation = Rot4.South;

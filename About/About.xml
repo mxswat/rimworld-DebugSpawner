@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
   <name>Debug Spawner</name>
-  <author>debug</author>
-  <packageId>debug.spawner</packageId>
+  <author>Mxswat</author>
+  <packageId>Mx.DebugSpawner</packageId>
   <description>Adds a "Spawn faction rows" submenu under the Spawning debug category. For each faction, lists all PawnKindDefs -- clicking one spawns 10 of that pawn kind on the map.</description>
   <supportedVersions>
     <li>1.6</li>
